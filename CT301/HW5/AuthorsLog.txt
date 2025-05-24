@@ -1,0 +1,297 @@
+
+
+
+THINK IT OUT!
+IF YOU CAN THINK IT YOU CAN CODE IT!
+
+IDEATION & LOG - BY AMBER FERRELL <3 PROGRAMMING ASSIGMENT 5
+*************************************************************
+IMAGE CONVERTER     C++     BRUCE DRAPER        SEMESTER 2
+
+
+Understanding:
+
+3 types of images:      Per Pixel:                  Range:
+Color       PPM/P3      3 Values RGB                [0-maxVal]
+Grayscale   PGM/P2      1 Value (intensity)         [0-maxVal]
+Binary      PBM/P1      1 bit                       (0 or 1)
+
+Each type has width, height and maxVal
+
+**********Tasks & Planning:************
+First Layout Attempt:
+
+|--- main.cpp               << reads input/output file names, controls flow
+|--- image.h                << base class + derived class declarations
+|--- image.cpp              << Implementations of the classes, functions
+|--- Image_types.cpp        << read/convert/write per image type?
+
+New Layout Attempt to test my abilities with polymorphism:
+
+|--- main.cpp               << reads input/output file names, controls flow
+|--- image.h                << base class + derived class declarations
+|--- colorImage.cpp         << ColorImage method implementations
+|--- image_helpers.cpp      << newImage(), getExtension(), etc.
+|--- binary_image.cpp		<< Binary Image method implementations
+|--- grayscale_Img.cpp		<< grayscale image method implementations
+
+
+1 > read PPM PGM OR PBM IMAGE
+2 > identify image file by header
+3 > if:
+     (image is color image or grayscale)
+     normalize()
+     
+4 > write it in format specified by output filename::
+            if (input format != output format)
+                convert the image to a different type!
+            if else(input file format == output format)
+                normalize and write as is
+
+            if: //gray to color
+                (input file == PGM && output file ends in PPM)
+                convertToPPM()
+                normalize()
+                write PPM file
+
+            if else: // gray to binary
+                (input file == PGM && output file ends in PBM)
+                convertToPBM()
+                write PBM file
+
+            if else: // color to gray
+                (input file == PPM && output file ends in PGM)
+                convertToPGM()
+                normalize()
+                write PGM file
+
+            if else: //color to binary
+                (input file == PPM && output file ends in PBM)
+                convertToPBM()
+                write PBM file
+            
+            if else: // binary to gray
+                (input file == PBM && output file ends in PGM)
+                convertToPGM()
+                normalize()
+                write PGM file
+            if else: // binary to color
+                (input file == PBM && output file ends in PPM)
+                convertToPPM()
+                normalize()
+                write PPM file
+            
+A base class : Image.cpp 
+
+class Image {
+public: read bool, write bool, normalize(), Image* convertTo, ~Image() {}
+}
+
+then child classes:
+    ColorImg : public Image {};
+    GrayscaleImg : public Image {};
+    BinaryImg : public Image {};
+
+realized quickly that i will need to have a helper function to assist in conversion
+it will decide if something needs conversion by looking at the substring of the name 
+of the file after '.' 
+
+will try to restructure and update the log 
+
+GET IN THE RIGHT HEAD SPACE! WHAT IS IT SUPPOSED TO BE DOING:
+ 
+A polymorphic C++ program that:
+
+Reads .ppm, .pgm, or .pbm images.
+
+Identifies type by magic number (P3, P2, P1).
+
+Normalizes color/grayscale images.
+
+Converts between formats as needed.
+
+Writes the image to an output file.
+
+
+
+********main***************
+
+    if argument count != 3:
+        print usage message
+        return error
+
+    open input file
+    if not open:
+        print error
+        return error
+
+    read first line to determine format (P1, P2, P3)
+    image = newImage(format)
+    if image is null:
+        print error
+        return error
+
+    if image->read(input) fails:
+        print error
+        cleanup and return
+
+    if format != P1:
+        image->normalize()
+
+    ext = getExtension(output_filename)
+    output_image = image->convertToExtension(ext)
+    if output_image is null:
+        print error
+        cleanup and return
+
+    if output->write(output_filename) fails:
+        print error
+        cleanup and return
+
+    delete both images as needed
+
+*********image.h****************
+
+
+Define struct RGB { int r, g, b; }
+
+Abstract class Image:
+    members: width, height, maxValue
+    pure virtual: read, write, convertTo, convertToExtension, pformat
+    virtual normalize()
+    virtual destructor
+
+Classes:
+    ColorImage : public Image
+    GrayScaleImg : public Image
+    BinaryImage : public Image
+
+
+**********image_helpers****************
+
+newImage(format):
+    return appropriate Image subclass based on "P1", "P2", "P3"
+
+getExtension(filename):
+    return file extension starting at last '.'
+
+Image::normalize():
+    empty virtual definition (used by BinaryImage to do nothing)
+
+
+***********color_image**************
+
+ColorImage::read(file):
+    read width, height, maxValue
+    resize pixel matrix
+    read RGB values per pixel
+    check bounds and validity
+
+ColorImage::normalize():
+    find min and max among all channels
+    if contrast = 0, print error and return
+    rescale each RGB channel using formula
+
+ColorImage::convertTo(ext):
+    if ext == .pgm: convert to grayscale by averaging RGB
+    if ext == .pbm: convert to binary using threshold sum > 382.5
+    return new object
+
+ColorImage::write(filename):
+    write P3 header
+    write RGB triplets line by line
+
+
+**********grayscale_Img*************
+
+GrayScaleImg::read(file):
+    read width, height, maxValue
+    read intensity values per pixel
+    store as RGB where all channels = intensity
+
+GrayScaleImg::normalize():
+    find min and max of intensities
+    if no contrast, print error and return
+    normalize values and clamp to [0, 255]
+
+GrayScaleImg::convertTo(ext):
+    if ext == .ppm: replicate intensity to RGB
+    if ext == .pbm: threshold intensity > 127 for binary
+    return new object
+
+GrayScaleImg::write(filename):
+    write P2 header and intensity values
+	
+	
+***************binary_image***************
+
+BinaryImage::read(file):
+    read and discard max value
+    validate that only 0s and 1s are present
+    store as RGB (0 or 255 for all channels)
+
+BinaryImage::convertTo(ext):
+    if ext == .pgm: copy intensity to grayscale
+    if ext == .ppm: replicate binary bit to RGB
+    return new object
+
+BinaryImage::write(filename):
+    write P1 header
+    output 0 or 1 depending on pixel.r value
+
+***********************************************LOG : Encountered Challenges **************************************************
+
+
+Binary Image Logic: 	.pbm files don't really normalize but still need to override
+Discovery/Remedy:		normalize() with an empty method in BinaryImage is allowed.
+						used an empty normalize() method to override
+
+Corrupt File Handling:  files with bad headers or pixel values werent being rejected properly
+Discovery/Remedy:		built stronger checks for each image types read()
+
+Pixel Format Confusion: the way we stored pixel data as RGB in grayscale and binary images was confusing
+						but turned out to be convenient for polymorphism
+						learned more about struct as well
+						
+makefile linking:		splitting into multiple files caused linker errors and makefule needed adjusting 
+Discovery/Remedy:		discovered this little treat: $(SOURCES:.cpp=.o) allowing all cpp to be on
+
+Missing Implementations:	received a ton of typeinfo for Image and vtable-related errors when compiling
+Discovery/Remedy:			ensured: 
+									 all abstract methods were implemented in every derived class
+									 The base class image had a virtual destructor
+									 the methods in image.h were correctly marked override in subclasses
+									 all necessary .cpp files were compiled and linked properly
+
+GrayScale normalize() bugs:			the variable norm was used in the clamp line before being assigned
+									and applied the clamp after already assigning the final value
+Discovery/Remedy:					directly clamped the result of the rounding calculation before assigning .r .g .back
+
+
+Syntax Errors in binary_image.cpp	wrote std:vetor instead of std::vector 
+									i was understandably annoyed haha XD
+
+convertTo() Not handling output ext:		wrote if (ext == "pbm") instead of checking for the full file extension ".pbm"
+											incorrect conversions or missed matches were annoying
+											
+Discovery/Remedy:							with head in shame i put in the '.' nah its fine really haha
+
+
+TestScript rounding mismatch:		Python test script failed tests like “expected 42, got 43”
+									because Python’s rounding didn’t match C++’s round().
+									
+Discovery/Remedy:					def cpp_round(x):
+									return int(x + 0.5) if x >= 0 else int(x - 0.5)
+									to mimic C++ round() logic
+
+
+
+file creations:			at first i was going to make a simple layout with image.cpp image_types.cpp and main.cpp
+						but we just went over polymorphism in c++ so i wasnt going to pass this opportunity to test
+						out the polym in this assignment. i divided all the images into their own separate files to 
+						test the polym and it was worth it! 
+						
+						
+						Tests:
+						created a test program in python to run test cases against the code
+						50/50 tests were passed - after a minor round() mismatch was corrected

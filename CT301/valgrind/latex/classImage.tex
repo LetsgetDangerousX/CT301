@@ -1,0 +1,111 @@
+\hypertarget{classImage}{}\section{Image Class Reference}
+\label{classImage}\index{Image@{Image}}
+
+
+\mbox{\hyperlink{classImage}{Image}} class will handle grayscale imagese and their correlation.  
+
+
+
+
+{\ttfamily \#include $<$gray\+Correlation.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classImage_ad5557cdd4e3ff3da5fd01e35f965a006}{load}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Load image from a file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classImage_a36bcae4838228d574738249a87dc4464}\label{classImage_a36bcae4838228d574738249a87dc4464}} 
+int \mbox{\hyperlink{classImage_a36bcae4838228d574738249a87dc4464}{get\+Width}} () const
+\begin{DoxyCompactList}\small\item\em Get image width-\/ leaving this here to make code reusable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classImage_a1cd7587f88b6932b5269051d1ba08ff9}\label{classImage_a1cd7587f88b6932b5269051d1ba08ff9}} 
+int \mbox{\hyperlink{classImage_a1cd7587f88b6932b5269051d1ba08ff9}{get\+Height}} () const
+\begin{DoxyCompactList}\small\item\em Get image height -\/ leaving this here to make code reusable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classImage_a59f46f04057fffc2d8e18b691d7cde21}\label{classImage_a59f46f04057fffc2d8e18b691d7cde21}} 
+double \mbox{\hyperlink{classImage_a59f46f04057fffc2d8e18b691d7cde21}{get\+Pixels}} (int r, int c) const
+\begin{DoxyCompactList}\small\item\em get Pixel value at (row, col) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classImage_a9e6bad7a8619c428cac2b7d079c827c6}{get\+Average}} () const
+\begin{DoxyCompactList}\small\item\em get average pixel value \end{DoxyCompactList}\item 
+const std\+::vector$<$ std\+::vector$<$ unsigned char $>$ $>$ \& \mbox{\hyperlink{classImage_af41db2b0ba6d691495d23dd5db62eab1}{get\+Pixel\+Vector}} () const
+\begin{DoxyCompactList}\small\item\em Provides reading access to pixel data. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static double \mbox{\hyperlink{classImage_a367968335abbdae7b1f6838d883b73b1}{compute}} (const \mbox{\hyperlink{classImage}{Image}} \&A, const \mbox{\hyperlink{classImage}{Image}} \&B)
+\begin{DoxyCompactList}\small\item\em Compute correlation between two images. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\mbox{\hyperlink{classImage}{Image}} class will handle grayscale imagese and their correlation. 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classImage_a367968335abbdae7b1f6838d883b73b1}\label{classImage_a367968335abbdae7b1f6838d883b73b1}} 
+\index{Image@{Image}!compute@{compute}}
+\index{compute@{compute}!Image@{Image}}
+\subsubsection{\texorpdfstring{compute()}{compute()}}
+{\footnotesize\ttfamily double Image\+::compute (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classImage}{Image}} \&}]{A,  }\item[{const \mbox{\hyperlink{classImage}{Image}} \&}]{B }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Compute correlation between two images. 
+
+Computes the Pearson Correlation Coefficient between two images.
+
+
+\begin{DoxyParams}{Parameters}
+{\em A} & First image \\
+\hline
+{\em B} & Second image \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Correlation score\+: -\/1 load error, -\/2 dimension mismatch 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_a9e6bad7a8619c428cac2b7d079c827c6}\label{classImage_a9e6bad7a8619c428cac2b7d079c827c6}} 
+\index{Image@{Image}!get\+Average@{get\+Average}}
+\index{get\+Average@{get\+Average}!Image@{Image}}
+\subsubsection{\texorpdfstring{get\+Average()}{getAverage()}}
+{\footnotesize\ttfamily double Image\+::get\+Average (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+get average pixel value 
+
+Computes the average pixel value. \mbox{\Hypertarget{classImage_af41db2b0ba6d691495d23dd5db62eab1}\label{classImage_af41db2b0ba6d691495d23dd5db62eab1}} 
+\index{Image@{Image}!get\+Pixel\+Vector@{get\+Pixel\+Vector}}
+\index{get\+Pixel\+Vector@{get\+Pixel\+Vector}!Image@{Image}}
+\subsubsection{\texorpdfstring{get\+Pixel\+Vector()}{getPixelVector()}}
+{\footnotesize\ttfamily const std\+::vector$<$std\+::vector$<$unsigned char$>$ $>$\& Image\+::get\+Pixel\+Vector (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Provides reading access to pixel data. 
+
+\begin{DoxyReturn}{Returns}
+Constant reference to the 2D pixel vector 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classImage_ad5557cdd4e3ff3da5fd01e35f965a006}\label{classImage_ad5557cdd4e3ff3da5fd01e35f965a006}} 
+\index{Image@{Image}!load@{load}}
+\index{load@{load}!Image@{Image}}
+\subsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily bool Image\+::load (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})}
+
+
+
+Load image from a file. 
+
+Loads an image from a P\+GM filein P2 Format.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Path to P\+GM image file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if successful, otherwise false 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+gray\+Correlation.\+h\item 
+gray\+Correlation.\+cpp\end{DoxyCompactItemize}
